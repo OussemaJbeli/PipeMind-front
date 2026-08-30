@@ -38,6 +38,16 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
+  // Dev-only: every base component and chart in both themes.
+  ...(import.meta.env.DEV
+    ? [{
+        path: '/_kitchen-sink',
+        name: 'kitchen-sink',
+        component: () => import('@/views/KitchenSinkView.vue'),
+        meta: { requiresAuth: false, layout: 'workspace' as const },
+      }]
+    : []),
+
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',

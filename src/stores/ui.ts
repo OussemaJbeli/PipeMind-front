@@ -18,6 +18,10 @@ export const useUiStore = defineStore('ui', () => {
 
   function applyTheme() {
     document.documentElement.dataset.theme = resolvedTheme.value
+
+    // Chart.js reads its colours once at registration, so a theme switch leaves
+    // every live chart painted for the old palette until it is told to repaint.
+    void import('@/components/charts/chartDefaults').then(m => m.refreshChartTheme())
   }
 
   function toggleTheme() {
