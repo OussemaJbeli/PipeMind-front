@@ -1,0 +1,46 @@
+{
+  "name": "vite-stage",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit -p tsconfig.app.json && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "@tanstack/vue-query": "^5.102.8",
+    "@vueuse/core": "^14.4.0",
+    "axios": "^1.20.0",
+    "chart.js": "^4.5.1",
+    "date-fns": "^4.4.0",
+    "floating-vue": "^5.2.2",
+    "nprogress": "^0.2.0",
+    "pinia": "^4.0.3",
+    "vue": "^3.5.41",
+    "vue-chartjs": "^5.3.4",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.127",
+    "@iconify-json/simple-icons": "^1.2.94",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.13.3",
+    "@types/nprogress": "^0.2.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/test-utils": "^2.5.0",
+    "@vue/tsconfig": "^0.9.1",
+    "jsdom": "^29.1.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "unplugin-auto-import": "^21.1.0",
+    "unplugin-icons": "^23.0.1",
+    "unplugin-vue-components": "^32.1.0",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11",
+    "vue-tsc": "^3.3.11"
+  }
+}

@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+@theme {
+  --color-bg:         var(--pm-bg);
+  --color-sidebar:    var(--pm-sidebar);
+  --color-surface:    var(--pm-surface);
+  --color-surface-2:  var(--pm-surface-2);
+  --color-surface-3:  var(--pm-surface-3);
+  --color-border:     var(--pm-border);
+
+  --color-fg:         var(--pm-text);
+  --color-dim:        var(--pm-text-dim);
+  --color-mute:       var(--pm-text-mute);
+
+  --color-accent:     var(--pm-accent);
+  --color-accent-hi:  var(--pm-accent-hi);
+  --color-on-accent:  var(--pm-on-accent);
+
+  --color-success:    var(--pm-success);
+  --color-danger:     var(--pm-danger);
+  --color-warning:    var(--pm-warning);
+  --color-running:    var(--pm-running);
+  --color-ai:         var(--pm-ai);
+
+  --radius-card:      var(--pm-radius-lg);
+  --font-sans:        var(--pm-font);
+  --font-mono:        var(--pm-font-mono);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--pm-border);
+  }
+
+  html {
+    background: var(--pm-bg);
+  }
+
+  body {
+    background: var(--pm-bg);
+    color: var(--pm-text);
+    font-family: var(--pm-font);
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Tabular numerals so metrics do not jitter as they update. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--pm-surface-3);
+    border: 2px solid var(--pm-bg);
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--pm-text-mute);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--pm-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* NProgress — themed to the brand accent rather than its default blue. */
+#nprogress .bar {
+  background: var(--pm-accent);
+  height: 2px;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--pm-accent), 0 0 5px var(--pm-accent);
+}

@@ -1,0 +1,96 @@
+/*
+ * PipeMind design tokens.
+ * Extracted from PipeMind-data/ui/workspace.png and ui/project.png.
+ *
+ * Nothing outside this file and the metadata modules may hardcode a colour.
+ */
+
+:root {
+  /* surfaces */
+  --pm-bg:           #0A0B0E;
+  --pm-sidebar:      #0C0E12;
+  --pm-surface:      #101318;
+  --pm-surface-2:    #161A21;
+  --pm-surface-3:    #1C212A;
+  --pm-border:       #1F242C;
+  --pm-border-soft:  #171B22;
+
+  /* text */
+  --pm-text:         #E7EAF0;
+  --pm-text-dim:     #8B93A1;
+  --pm-text-mute:    #5C6472;
+
+  /* brand */
+  --pm-accent:       #A9E831;
+  --pm-accent-hi:    #C6F55A;
+  --pm-accent-lo:    #7DB520;
+  --pm-accent-dim:   rgb(169 232 49 / 12%);
+  --pm-accent-glow:  rgb(169 232 49 / 22%);
+  --pm-on-accent:    #0A0B0E;
+
+  /* status */
+  --pm-success:      #4ADE80;
+  --pm-danger:       #F04438;
+  --pm-warning:      #F5A524;
+  --pm-running:      #6366F1;
+  --pm-ai:           #A855F7;
+  --pm-info:         #38BDF8;
+
+  /* shape */
+  --pm-radius-sm:    8px;
+  --pm-radius:       12px;
+  --pm-radius-lg:    16px;
+  --pm-radius-xl:    20px;
+  --pm-shadow:       0 1px 2px rgb(0 0 0 / 40%);
+  --pm-shadow-lg:    0 8px 32px rgb(0 0 0 / 45%);
+
+  /* layout */
+  --pm-sidebar-w:    232px;
+  --pm-sidebar-w-collapsed: 68px;
+  --pm-topbar-h:     68px;
+
+  --pm-font:         'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --pm-font-mono:    'JetBrains Mono', 'Fira Code', ui-monospace, 'SF Mono', monospace;
+
+  color-scheme: dark;
+}
+
+/*
+ * Light theme is a second design, not an inversion. PipeMind is a dark-first
+ * developer tool; light mode still has to feel deliberate.
+ *
+ * The accent MUST change: #A9E831 on white is roughly 1.6:1 and unreadable.
+ * Darkening to #5F930B reaches AA while staying recognisably the same brand.
+ */
+:root[data-theme='light'] {
+  --pm-bg:           #F7F8FA;
+  --pm-sidebar:      #FFFFFF;
+  --pm-surface:      #FFFFFF;
+  --pm-surface-2:    #F2F4F7;
+  --pm-surface-3:    #E9ECF1;
+  --pm-border:       #E3E7ED;
+  --pm-border-soft:  #EEF1F5;
+
+  --pm-text:         #10141B;
+  --pm-text-dim:     #5C6472;
+  --pm-text-mute:    #8B93A1;
+
+  --pm-accent:       #5F930B;
+  --pm-accent-hi:    #4E7A08;
+  --pm-accent-lo:    #7DB520;
+  --pm-accent-dim:   rgb(95 147 11 / 10%);
+  --pm-accent-glow:  rgb(95 147 11 / 16%);
+  --pm-on-accent:    #FFFFFF;
+
+  --pm-success:      #16A34A;
+  --pm-danger:       #DC2626;
+  --pm-warning:      #D97706;
+  --pm-running:      #4F46E5;
+  --pm-ai:           #9333EA;
+  --pm-info:         #0284C7;
+
+  --pm-shadow:       0 1px 2px rgb(16 20 27 / 6%);
+  --pm-shadow-lg:    0 8px 32px rgb(16 20 27 / 10%);
+
+  color-scheme: light;
+}
