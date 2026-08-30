@@ -28,12 +28,15 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/app/projects/:slug',
     meta: { requiresAuth: true, layout: 'project' },
-    props: true,
     children: [
       {
         path: '',
         name: 'project.overview',
         component: () => import('@/views/project/ProjectOverviewView.vue'),
+        // props must be declared on the CHILD: Vue Router does not propagate a
+        // parent's `props: true` down to nested routes, so the child would
+        // receive slug === undefined.
+        props: true,
       },
     ],
   },

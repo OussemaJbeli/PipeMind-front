@@ -14,8 +14,14 @@ defineProps<{ items: CategorySlice[], linkTo?: (item: CategorySlice) => any }>()
         class="flex items-center gap-3"
         :class="linkTo && 'group cursor-pointer'"
       >
+        <!--
+          The icon class is owned by the frontend. The API sends a bare Lucide
+          name ("flask-conical") from the PHP enum, which is not a usable class —
+          and prefixing it at the call site would silently produce an empty tile
+          the moment the backend adds a category.
+        -->
         <PmIconTile
-          :icon="item.icon ?? categoryMeta(item.category).icon"
+          :icon="categoryMeta(item.category).icon"
           :color="item.color"
           size="sm"
         />

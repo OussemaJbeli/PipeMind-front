@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { Bar, Line } from 'vue-chartjs'
 
-import { ensureChartDefaults } from './chartDefaults'
+import { ensureChartDefaults, resolveColor, withAlpha } from './chartDefaults'
 
 const props = withDefaults(defineProps<{
   data: number[]
@@ -18,7 +18,7 @@ const chartData = computed(() => ({
   labels: props.data.map((_, i) => String(i)),
   datasets: [{
     data: props.data,
-    borderColor: props.color,
+    borderColor: resolveColor(props.color),
     borderWidth: 1.5,
     tension: 0.35,
     pointRadius: 0,
@@ -27,15 +27,15 @@ const chartData = computed(() => ({
     barPercentage: 0.7,
     categoryPercentage: 0.9,
     backgroundColor: props.type === 'bar'
-      ? props.color
+      ? resolveColor(props.color)
       : (ctx: any) => {
           const { chart } = ctx
           if (!chart.chartArea)
             return 'transparent'
 
           const g = chart.ctx.createLinearGradient(0, chart.chartArea.top, 0, chart.chartArea.bottom)
-          g.addColorStop(0, `color-mix(in srgb, ${props.color} 28%, transparent)`)
-          g.addColorStop(1, 'transparent')
+          g.addColorStop(0, withAlpha(props.color, 0.28))
+          g.addColorStop(1, withAlpha(props.color, 0))
           return g
         },
   }],

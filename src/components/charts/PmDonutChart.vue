@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { Doughnut } from 'vue-chartjs'
 
 import type { CategorySlice } from '@/types/api'
-import { ensureChartDefaults } from './chartDefaults'
+import { ensureChartDefaults, resolveColor } from './chartDefaults'
 
 const props = withDefaults(defineProps<{
   items: CategorySlice[]
@@ -17,7 +17,7 @@ const chartData = computed(() => ({
   labels: props.items.map(i => i.label),
   datasets: [{
     data: props.items.map(i => i.count),
-    backgroundColor: props.items.map(i => i.color),
+    backgroundColor: props.items.map(i => resolveColor(i.color)),
     borderWidth: 0,
     // Expand on hover rather than adding a border: a border on a zero-count
     // slice draws a visible ring where there is no data.

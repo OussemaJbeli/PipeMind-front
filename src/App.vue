@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import BlankLayout from '@/layouts/BlankLayout.vue'
+import ProjectLayout from '@/layouts/ProjectLayout.vue'
 import WorkspaceLayout from '@/layouts/WorkspaceLayout.vue'
 
 const route = useRoute()
@@ -11,8 +12,8 @@ const route = useRoute()
 const layout = computed(() => {
   switch (route.meta.layout) {
     case 'auth': return AuthLayout
-    case 'workspace':
-    case 'project': return WorkspaceLayout
+    case 'workspace': return WorkspaceLayout
+    case 'project': return ProjectLayout
     default: return BlankLayout
   }
 })

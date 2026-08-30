@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import { Line } from 'vue-chartjs'
 
 import type { ChartSeries } from '@/types/api'
-import { AXIS, ensureChartDefaults } from './chartDefaults'
+import { AXIS, ensureChartDefaults, resolveColor, withAlpha } from './chartDefaults'
 
 const props = withDefaults(defineProps<{
   series: ChartSeries[]
@@ -31,16 +31,16 @@ const chartData = computed(() => ({
   datasets: visible.value.map(s => ({
     label: s.label,
     data: s.points.map(p => p.y),
-    borderColor: s.color,
+    borderColor: resolveColor(s.color),
     borderWidth: 2,
     tension: 0.35,
     pointRadius: 2.5,
     pointHoverRadius: 5,
-    pointBackgroundColor: s.color,
-    pointBorderColor: 'var(--pm-bg)',
+    pointBackgroundColor: resolveColor(s.color),
+    pointBorderColor: resolveColor('var(--pm-bg)', '#0A0B0E'),
     pointBorderWidth: 2,
     fill: s.key === props.fillKey,
-    backgroundColor: `color-mix(in srgb, ${s.color} 14%, transparent)`,
+    backgroundColor: withAlpha(s.color, 0.14),
   })),
 }))
 

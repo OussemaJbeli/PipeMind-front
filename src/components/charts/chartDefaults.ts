@@ -1,6 +1,6 @@
 import {
-  BarController, BarElement, CategoryScale, Chart, DoughnutController, Filler,
-  Legend, LinearScale, LineController, LineElement, PointElement, Tooltip,
+  ArcElement, BarController, BarElement, CategoryScale, Chart, DoughnutController,
+  Filler, Legend, LinearScale, LineController, LineElement, PointElement, Tooltip,
 } from 'chart.js'
 
 /**
@@ -9,7 +9,7 @@ import {
  */
 Chart.register(
   LineController, BarController, DoughnutController,
-  LineElement, PointElement, BarElement,
+  LineElement, PointElement, BarElement, ArcElement,
   CategoryScale, LinearScale,
   Filler, Tooltip, Legend,
 )
@@ -70,8 +70,47 @@ export function ensureChartDefaults() {
     applyChartDefaults()
 }
 
+/**
+ * Canvas cannot parse CSS functions: neither `var(--x)` nor `color-mix(...)`
+ * reaches ctx.fillStyle or addColorStop as a usable value. Every colour handed
+ * to Chart.js has to be resolved to a literal first.
+ */
+export function resolveColor(value: string, fallback = '#A9E831'): string {
+  if (typeof window === 'undefined')
+    return fallback
+
+  const trimmed = value.trim()
+
+  if (!trimmed.startsWith('var('))
+    return trimmed
+
+  const name = trimmed.slice(4, -1).split(',')[0]?.trim() ?? ''
+  const resolved = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+
+  return resolved || fallback
+}
+
+/** Literal rgba, safe for addColorStop. */
+export function withAlpha(color: string, alpha: number): string {
+  const resolved = resolveColor(color)
+
+  if (resolved.startsWith('#')) {
+    const hex = resolved.slice(1)
+    const full = hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex
+    const int = Number.parseInt(full, 16)
+
+    return `rgba(${(int >> 16) & 255}, ${(int >> 8) & 255}, ${int & 255}, ${alpha})`
+  }
+
+  const nums = resolved.match(/[\d.]+/g)
+  if (nums && nums.length >= 3)
+    return `rgba(${nums[0]}, ${nums[1]}, ${nums[2]}, ${alpha})`
+
+  return resolved
+}
+
 export const AXIS = {
-  grid: { color: 'color-mix(in srgb, var(--pm-border) 60%, transparent)', drawTicks: false },
+  grid: { color: withAlpha('var(--pm-border)', 0.6), drawTicks: false },
   border: { display: false },
   ticks: { padding: 8, maxRotation: 0, autoSkipPadding: 20 },
 } as const

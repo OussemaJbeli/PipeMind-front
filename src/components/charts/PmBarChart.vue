@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 
-import { AXIS, ensureChartDefaults } from './chartDefaults'
+import { AXIS, ensureChartDefaults, resolveColor } from './chartDefaults'
 
 export interface BarDatum {
   date: string
@@ -29,11 +29,13 @@ const chartData = computed(() => ({
     data: props.data.map(d => d.value),
     backgroundColor: props.data.map((d) => {
       if (!props.thresholds)
-        return 'var(--pm-accent)'
+        return resolveColor('var(--pm-accent)')
 
-      return d.value >= props.thresholds.good
-        ? 'var(--pm-accent)'
-        : d.value >= props.thresholds.warn ? 'var(--pm-warning)' : 'var(--pm-danger)'
+      return resolveColor(
+        d.value >= props.thresholds.good
+          ? 'var(--pm-accent)'
+          : d.value >= props.thresholds.warn ? 'var(--pm-warning)' : 'var(--pm-danger)',
+      )
     }),
     borderRadius: 2,
     barPercentage: 0.72,
