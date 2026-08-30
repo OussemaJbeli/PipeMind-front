@@ -1,6 +1,15 @@
 @import 'tailwindcss';
 @import './tokens.css';
 
+/*
+ * Icons as CSS classes (i-lucide-*), not just components.
+ * unplugin-icons resolves <i-lucide-plus /> at compile time, which cannot work
+ * for icons chosen at runtime — every status, category and activity action picks
+ * its icon from a metadata module. This plugin generates mask-image classes so
+ * :class="meta.icon" works.
+ */
+@plugin '@egoist/tailwindcss-icons';
+
 @theme {
   --color-bg:         var(--pm-bg);
   --color-sidebar:    var(--pm-sidebar);

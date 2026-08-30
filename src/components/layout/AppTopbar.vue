@@ -1,11 +1,21 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 
+const auth = useAuthStore()
 const ui = useUiStore()
 </script>
 
 <template>
-  <div class="flex flex-1 items-center justify-end gap-2">
+  <div class="flex flex-1 items-center justify-end gap-2.5">
+    <slot name="start" />
+
+    <PmButton v-if="auth.can('projects.manage')" variant="primary">
+      <i-lucide-plus class="size-4" /> Add Project
+    </PmButton>
+
+    <NotificationBell />
+
     <button
       class="grid size-10 place-items-center rounded-[var(--pm-radius)] text-dim transition-colors hover:bg-surface-2 hover:text-fg"
       :aria-label="`Switch to ${ui.resolvedTheme === 'dark' ? 'light' : 'dark'} theme`"
