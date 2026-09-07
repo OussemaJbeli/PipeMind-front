@@ -25,17 +25,17 @@ const groups: NavGroup[] = [
   {
     items: [
       { label: 'Home', icon: 'i-lucide-house', to: { name: 'workspace' } },
-      { label: 'Projects', icon: 'i-lucide-folder', to: { name: 'workspace' }, pending: true },
-      { label: 'Activity', icon: 'i-lucide-activity', to: { name: 'workspace' }, pending: true },
+      { label: 'Projects', icon: 'i-lucide-folder', to: { name: 'projects' } },
+      { label: 'Activity', icon: 'i-lucide-activity', to: { name: 'activity' } },
     ],
   },
   {
     label: 'Workspace',
     items: [
-      { label: 'Members', icon: 'i-lucide-users', to: { name: 'workspace' }, permission: 'team.manage', pending: true },
-      { label: 'Integrations', icon: 'i-lucide-plug', to: { name: 'workspace' }, permission: 'projects.manage', pending: true },
-      { label: 'AI Providers', icon: 'i-lucide-sparkles', to: { name: 'workspace' }, permission: 'ai.manage', pending: true },
-      { label: 'Settings', icon: 'i-lucide-settings', to: { name: 'workspace' }, pending: true },
+      { label: 'Members', icon: 'i-lucide-users', to: { name: 'members' } },
+      { label: 'Integrations', icon: 'i-lucide-plug', to: { name: 'integrations' }, permission: 'integrations.manage' },
+      { label: 'AI Providers', icon: 'i-lucide-sparkles', to: { name: 'ai-providers' }, permission: 'ai.manage' },
+      { label: 'Settings', icon: 'i-lucide-settings', to: { name: 'workspace-settings' } },
     ],
   },
 ]

@@ -30,7 +30,7 @@ defineProps<{ breakdown: FailureBreakdown, slug: string }>()
         <li v-for="item in breakdown.items" :key="item.category">
           <RouterLink
             :to="{
-              name: 'project.overview',
+              name: 'project.failures',
               params: { slug },
               query: item.category === 'OTHER' ? {} : { category: item.category },
             }"

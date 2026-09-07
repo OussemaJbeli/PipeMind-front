@@ -27,17 +27,17 @@ const groups = computed<Array<{ label?: string, items: NavItem[] }>>(() => [
     label: 'Project',
     items: [
       { label: 'Overview', icon: 'i-lucide-house', to: { name: 'project.overview', params: { slug: slug.value } } },
-      { label: 'Pipelines', icon: 'i-lucide-git-branch', to: { name: 'project.overview', params: { slug: slug.value } }, pending: true },
-      { label: 'Failures', icon: 'i-lucide-triangle-alert', to: { name: 'project.overview', params: { slug: slug.value } }, pending: true },
-      { label: 'Analytics', icon: 'i-lucide-chart-column', to: { name: 'project.overview', params: { slug: slug.value } }, pending: true },
+      { label: 'Pipelines', icon: 'i-lucide-git-branch', to: { name: 'project.pipelines', params: { slug: slug.value } } },
+      { label: 'Failures', icon: 'i-lucide-triangle-alert', to: { name: 'project.failures', params: { slug: slug.value } } },
+      { label: 'Analytics', icon: 'i-lucide-chart-column', to: { name: 'project.analytics', params: { slug: slug.value } } },
     ],
   },
   {
     label: 'Intelligence',
     items: [
-      { label: 'AI Analyses', icon: 'i-lucide-sparkles', to: { name: 'project.overview', params: { slug: slug.value } }, pending: true },
-      { label: 'Failure History', icon: 'i-lucide-history', to: { name: 'project.overview', params: { slug: slug.value } }, pending: true },
-      { label: 'Knowledge', icon: 'i-lucide-book-open', to: { name: 'project.overview', params: { slug: slug.value } }, pending: true },
+      { label: 'AI Analyses', icon: 'i-lucide-sparkles', to: { name: 'project.analyses', params: { slug: slug.value } } },
+      { label: 'Failure History', icon: 'i-lucide-history', to: { name: 'project.history', params: { slug: slug.value } } },
+      { label: 'Knowledge', icon: 'i-lucide-book-open', to: { name: 'project.knowledge', params: { slug: slug.value } } },
     ],
   },
   {
@@ -49,8 +49,8 @@ const groups = computed<Array<{ label?: string, items: NavItem[] }>>(() => [
   {
     label: 'Settings',
     items: [
-      { label: 'Integration', icon: 'i-lucide-plug', to: { name: 'project.overview', params: { slug: slug.value } }, permission: 'projects.manage', pending: true },
-      { label: 'Project Settings', icon: 'i-lucide-settings', to: { name: 'project.overview', params: { slug: slug.value } }, permission: 'projects.manage', pending: true },
+      { label: 'Integration', icon: 'i-lucide-plug', to: { name: 'project.integration', params: { slug: slug.value } }, permission: 'projects.manage' },
+      { label: 'Project Settings', icon: 'i-lucide-settings', to: { name: 'project.settings', params: { slug: slug.value } }, permission: 'projects.manage' },
     ],
   },
 ])
@@ -66,11 +66,16 @@ onClickOutside(userMenu, () => { userMenuOpen.value = false })
     <span v-if="!ui.sidebarCollapsed" class="text-[17px] font-semibold">PipeMind</span>
   </div>
 
-  <!-- Project switcher -->
+  <!--
+    Opens the command palette rather than a dropdown of its own: the palette
+    already lists every project and handles keyboard navigation, and a second
+    overlay would be a second thing to keep in step.
+  -->
   <button
     class="mx-3 mb-2 flex items-center gap-3 rounded-[var(--pm-radius)] border bg-surface p-3 text-left transition-colors hover:bg-surface-2"
     :class="ui.sidebarCollapsed ? 'w-[calc(100%-24px)] justify-center px-2' : 'w-[calc(100%-24px)]'"
-    @click="$router.push({ name: 'workspace' })"
+    :title="`Switch project — ${'\u2318'}K`"
+    @click="ui.commandPaletteOpen = true"
   >
     <span
       class="grid size-9 shrink-0 place-items-center rounded-[var(--pm-radius-sm)] text-xs font-semibold"

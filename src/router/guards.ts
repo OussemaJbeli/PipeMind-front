@@ -18,6 +18,22 @@ router.beforeEach(async (to) => {
   if (to.meta.guest && auth.isAuthenticated)
     return { name: 'workspace' }
 
+  /*
+   * A workspace with no integration is a blank board with no instruction on it.
+   * Send anyone who has not finished setup to /welcome instead — but never from
+   * /welcome itself, and never from an invitation link, where the invitee is
+   * joining a workspace that is already set up.
+   */
+  if (
+    auth.isAuthenticated
+    && !auth.user?.onboarded_at
+    && to.meta.requiresAuth
+    && to.name !== 'onboarding'
+    && to.name !== 'accept-invitation'
+  ) {
+    return { name: 'onboarding' }
+  }
+
   if (to.meta.permission && !auth.can(to.meta.permission as string))
     return { name: 'workspace' }
 

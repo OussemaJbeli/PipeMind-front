@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Typecheck, test & build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # vue-tsc, not tsc: half the type surface lives inside .vue files and
+      # plain tsc cannot see any of it.
+      - name: Typecheck
+        run: npm run typecheck
+
+      # The live-API contract test skips itself when nothing answers on
+      # PM_API_URL, so it is inert here rather than red. It is a local guard
+      # against frontend types drifting from the backend, not a CI gate.
+      - name: Tests
+        run: npm test -- --run
+
+      - name: Build
+        run: npx vite build

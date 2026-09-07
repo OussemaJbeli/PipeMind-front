@@ -32,5 +32,7 @@ const ui = useUiStore()
         <slot />
       </main>
     </div>
+
+    <CommandPalette />
   </div>
 </template>

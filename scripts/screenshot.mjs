@@ -18,7 +18,7 @@ page.on('console', m => m.type() === 'error' && errors.push(m.text()))
 page.on('pageerror', e => errors.push(String(e)))
 
 await page.goto('http://localhost:5173/login', { waitUntil: 'networkidle' })
-await page.fill('input[type=email]', 'PmAG01@evoxai.ca')
+await page.fill('input[type=email]', 'jbelioussema33@gmail.com')
 await page.fill('input[type=password]', 'password')
 await page.click('button[type=submit]')
 await page.waitForURL('**/app', { timeout: 15000 })

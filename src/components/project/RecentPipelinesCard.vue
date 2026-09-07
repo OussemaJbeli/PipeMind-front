@@ -14,12 +14,19 @@ const router = useRouter()
  * pipeline page to click once more is a wasted step in the most common path.
  */
 function open(pipeline: PipelineListItem) {
+  if (pipeline.has_failure && pipeline.failure_uuid) {
+    router.push({
+      name: 'project.failure',
+      params: { slug: props.slug, uuid: pipeline.failure_uuid },
+    })
+
+    return
+  }
+
   router.push({
     name: 'project.overview',
     params: { slug: props.slug },
-    query: pipeline.has_failure && pipeline.failure_uuid
-      ? { failure: pipeline.failure_uuid }
-      : { pipeline: String(pipeline.iid) },
+    query: { pipeline: String(pipeline.iid) },
   })
 }
 </script>
@@ -28,7 +35,7 @@ function open(pipeline: PipelineListItem) {
   <PmCard title="Recent Pipelines" :padded="false">
     <template #actions>
       <RouterLink
-        :to="{ name: 'project.overview', params: { slug } }"
+        :to="{ name: 'project.pipelines', params: { slug } }"
         class="text-xs font-medium text-accent hover:underline"
       >
         View all

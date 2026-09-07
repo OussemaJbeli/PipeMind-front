@@ -61,6 +61,34 @@ export const useAuthStore = defineStore('auth', {
       await this.fetchUser()
     },
 
+    async forgotPassword(email: string) {
+      await csrf()
+      await api.post('/auth/forgot-password', { email })
+    },
+
+    async resetPassword(payload: {
+      token: string
+      email: string
+      password: string
+      password_confirmation: string
+    }) {
+      await csrf()
+      await api.post('/auth/reset-password', payload)
+    },
+
+    /** Joins the team and switches to it, so the caller lands somewhere useful. */
+    async acceptInvitation(token: string) {
+      await csrf()
+      await api.post(`/invitations/${token}/accept`)
+      await this.fetchUser()
+    },
+
+    /** Stops the router guard redirecting to /welcome. */
+    async completeOnboarding() {
+      const { data } = await api.post<{ data: AuthUser }>('/auth/onboarded')
+      this.user = data.data
+    },
+
     async logout() {
       try {
         await api.post('/auth/logout')
