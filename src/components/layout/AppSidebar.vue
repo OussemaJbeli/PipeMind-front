@@ -35,6 +35,7 @@ const groups: NavGroup[] = [
       { label: 'Members', icon: 'i-lucide-users', to: { name: 'members' } },
       { label: 'Integrations', icon: 'i-lucide-plug', to: { name: 'integrations' }, permission: 'integrations.manage' },
       { label: 'AI Providers', icon: 'i-lucide-sparkles', to: { name: 'ai-providers' }, permission: 'ai.manage' },
+      { label: 'Policies', icon: 'i-lucide-shield-check', to: { name: 'policies' }, permission: 'policies.edit' },
       { label: 'Settings', icon: 'i-lucide-settings', to: { name: 'workspace-settings' } },
     ],
   },

@@ -85,6 +85,12 @@ const routes: RouteRecordRaw[] = [
         meta: { permission: 'ai.manage' },
       },
       {
+        path: 'policies',
+        name: 'policies',
+        component: () => import('@/views/workspace/PoliciesView.vue'),
+        meta: { permission: 'policies.edit' },
+      },
+      {
         path: 'settings',
         name: 'workspace-settings',
         component: () => import('@/views/workspace/WorkspaceSettingsView.vue'),
@@ -156,6 +162,12 @@ const routes: RouteRecordRaw[] = [
         path: 'failures/:uuid',
         name: 'project.failure',
         component: () => import('@/views/project/FailureDetailView.vue'),
+        props: true,
+      },
+      {
+        path: 'remediation',
+        name: 'project.remediation',
+        component: () => import('@/views/project/RemediationView.vue'),
         props: true,
       },
       {

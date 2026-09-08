@@ -58,6 +58,10 @@ export function useKnowledge(slug: MaybeRefOrGetter<string>) {
     // unindexed and becomes retrievable a few seconds later. Polling is how
     // that transition shows up without the user reloading; it stops as soon as
     // nothing is pending.
+    //
+    // Deliberately NOT wrapped in whenNotLive(): no broadcast event reports
+    // indexing, so standing this down while connected would leave a document
+    // showing "indexing…" until the page is reloaded.
     refetchInterval: query =>
       (query.state.data ?? []).some(d => !d.indexed_at) ? 4_000 : false,
     refetchIntervalInBackground: false,

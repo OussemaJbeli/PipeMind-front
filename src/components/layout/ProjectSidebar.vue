@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router'
 
 import { useProject } from '@/api/queries/project'
+import { useRemediations } from '@/api/queries/remediation'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 
@@ -11,6 +12,11 @@ const ui = useUiStore()
 
 const slug = computed(() => String(route.params.slug ?? ''))
 const { data: project } = useProject(slug)
+
+// The count belongs in the navigation because a pending approval is somebody
+// blocked: it is the one thing in this app that waits on a human.
+const { data: remediations } = useRemediations(slug)
+const pendingRemediations = computed(() => remediations.value?.pending || null)
 
 interface NavItem {
   label: string
@@ -43,7 +49,7 @@ const groups = computed<Array<{ label?: string, items: NavItem[] }>>(() => [
   {
     label: 'Actions',
     items: [
-      { label: 'Remediation', icon: 'i-lucide-wrench', to: { name: 'project.overview', params: { slug: slug.value } }, pending: true },
+      { label: 'Remediation', icon: 'i-lucide-wrench', to: { name: 'project.remediation', params: { slug: slug.value } }, badge: pendingRemediations.value },
     ],
   },
   {

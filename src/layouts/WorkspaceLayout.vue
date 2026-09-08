@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { useWorkspaceRealtime } from '@/composables/useWorkspaceRealtime'
 import { useUiStore } from '@/stores/ui'
 
 const ui = useUiStore()
+
+useWorkspaceRealtime()
 </script>
 
 <template>
@@ -25,6 +28,7 @@ const ui = useUiStore()
       >
         <slot name="topbar">
           <AppTopbar />
+        <ConnectionIndicator class="ml-auto shrink-0" />
         </slot>
       </header>
 

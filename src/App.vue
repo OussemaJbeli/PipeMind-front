@@ -27,6 +27,12 @@ const layout = computed(() => {
       </Transition>
     </RouterView>
   </component>
+
+  <!--
+    Mounted at the root, outside the layout switch: a failure toast has to
+    survive the navigation it offers, and it teleports to the body anyway.
+  -->
+  <PmToastHost />
 </template>
 
 <style>

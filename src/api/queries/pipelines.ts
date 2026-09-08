@@ -2,6 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { computed, ref, toValue, type MaybeRefOrGetter } from 'vue'
 
 import { api } from '@/api/client'
+import { whenNotLive } from '@/api/polling'
 import type {
   AnalysisListItem,
   AnalysisTotals,
@@ -49,7 +50,7 @@ export function usePipelines(
     staleTime: 15_000,
     // Poll only while something is in flight. An unconditional interval on a
     // 25-row table is a load generator with no benefit.
-    refetchInterval: () => (anyRunning.value ? 8_000 : false),
+    refetchInterval: whenNotLive(() => (anyRunning.value ? 8_000 : false)),
     refetchIntervalInBackground: false,
     placeholderData: keepPreviousData,
   })
@@ -72,7 +73,7 @@ export function usePipeline(slug: MaybeRefOrGetter<string>, iid: MaybeRefOrGette
       return data.data
     },
     staleTime: 10_000,
-    refetchInterval: () => (active.value ? 5_000 : false),
+    refetchInterval: whenNotLive(() => (active.value ? 5_000 : false)),
     refetchIntervalInBackground: false,
   })
 

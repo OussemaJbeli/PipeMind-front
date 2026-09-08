@@ -2,6 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 
 import { api } from '@/api/client'
+import { whenNotLive } from '@/api/polling'
 import type { Envelope, ProjectDetail, ProjectOverview } from '@/types/api'
 import type { RangeKey } from '@/types/domain'
 
@@ -27,7 +28,7 @@ export function useProjectOverview(
     staleTime: 20_000,
     // Poll fast while a pipeline is in flight, slowly otherwise, never when the
     // tab is hidden. An unconditional interval turns a dashboard into a load generator.
-    refetchInterval: () => (hasRunning.value ? 8_000 : 60_000),
+    refetchInterval: whenNotLive(() => (hasRunning.value ? 8_000 : 60_000)),
     refetchIntervalInBackground: false,
     // Keeps the board visible while a range change refetches, instead of blanking out.
     placeholderData: keepPreviousData,

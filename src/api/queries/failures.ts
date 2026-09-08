@@ -2,6 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { computed, ref, toValue, type MaybeRefOrGetter } from 'vue'
 
 import { api } from '@/api/client'
+import { whenNotLive } from '@/api/polling'
 import type {
   AnalysisFeedbackPayload,
   Envelope,
@@ -60,7 +61,7 @@ export function useFailure(uuid: MaybeRefOrGetter<string>) {
       return data.data
     },
     staleTime: 10_000,
-    refetchInterval: () => (analysing.value ? 3_000 : false),
+    refetchInterval: whenNotLive(() => (analysing.value ? 3_000 : false)),
     refetchIntervalInBackground: false,
   })
 

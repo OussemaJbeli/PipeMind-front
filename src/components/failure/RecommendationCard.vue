@@ -1,20 +1,45 @@
 <script setup lang="ts">
+import type { ApiError } from '@/api/client'
+import { useAcceptRecommendation } from '@/api/queries/remediation'
 import { ACTION_META } from '@/composables/useActionMeta'
+import { useAuthStore } from '@/stores/auth'
 import type { Recommendation } from '@/types/api'
 
-const props = defineProps<{ rec: Recommendation }>()
+const props = defineProps<{ rec: Recommendation, slug?: string }>()
+
+const auth = useAuthStore()
+const accept = useAcceptRecommendation()
 
 const meta = computed(() => ACTION_META[props.rec.action_type]
   ?? { label: props.rec.action_type, icon: 'i-lucide-circle' })
 
 /**
- * The remediation policy engine lands in roadmap 18, so `policy` is absent today.
- *
- * Rendering an Apply button without it would offer an action the backend cannot
- * honour. Until the gate exists, the card shows what to do and stops there —
- * which is honest, and still useful.
+ * A recommendation persisted before the policy engine existed carries no gate.
+ * Absent is not permission: offering Apply would promise an action the backend
+ * would refuse, so the card says to apply it by hand instead.
  */
 const gateKnown = computed(() => Boolean(props.rec.policy))
+const decision = computed(() => props.rec.policy?.decision ?? null)
+
+const canRequest = computed(() =>
+  auth.can('remediation.request') && decision.value !== 'forbidden')
+
+const result = ref<string | null>(null)
+const actionError = ref<string | null>(null)
+
+function apply() {
+  result.value = null
+  actionError.value = null
+
+  accept.mutate(props.rec.uuid, {
+    onSuccess: (remediation) => {
+      result.value = remediation.status === 'pending_approval'
+        ? 'Sent for approval.'
+        : 'Queued to run now.'
+    },
+    onError: thrown => (actionError.value = (thrown as unknown as ApiError).message),
+  })
+}
 </script>
 
 <template>
@@ -55,9 +80,38 @@ const gateKnown = computed(() => Boolean(props.rec.policy))
       <span v-if="rec.confidence !== null">{{ Math.round(rec.confidence * 100) }}% confident</span>
     </div>
 
-    <!-- Automated application arrives with the policy engine in roadmap 18. -->
-    <p v-if="!gateKnown" class="mt-2 text-[11px] text-mute">
-      Apply this manually — PipeMind does not yet execute changes.
+    <!--
+      The gate, then the button. Showing what the policy decided before offering
+      the action is the difference between an assistant and a surprise.
+    -->
+    <PolicyNotice
+      v-if="gateKnown"
+      :decision="decision"
+      :reason="rec.policy?.reason ?? null"
+      class="mt-3"
+    />
+
+    <p v-else class="mt-2 text-[11px] text-mute">
+      Apply this manually — this recommendation predates the policy engine.
     </p>
+
+    <div v-if="gateKnown && canRequest && !result" class="mt-3 flex justify-end">
+      <PmButton variant="primary" size="sm" :loading="accept.isPending.value" @click="apply">
+        {{ decision === 'auto_allowed' ? 'Apply now' : 'Request approval' }}
+      </PmButton>
+    </div>
+
+    <p v-if="result" class="mt-3 flex items-center gap-1.5 text-[11px] text-accent">
+      <i-lucide-check class="size-3.5" />{{ result }}
+      <RouterLink
+        v-if="slug"
+        :to="{ name: 'project.remediation', params: { slug } }"
+        class="underline hover:text-fg"
+      >
+        View
+      </RouterLink>
+    </p>
+
+    <PmAlert v-if="actionError" tone="danger" class="mt-3">{{ actionError }}</PmAlert>
   </div>
 </template>

@@ -1,7 +1,25 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+import { useProject } from '@/api/queries/project'
+import { useProjectRealtime } from '@/composables/useProjectRealtime'
+import { useWorkspaceRealtime } from '@/composables/useWorkspaceRealtime'
 import { useUiStore } from '@/stores/ui'
 
 const ui = useUiStore()
+const route = useRoute()
+
+// Subscribed at the layout, not per view: navigating between a project's pages
+// must not tear the socket down and re-authorise it on every click.
+const slug = computed(() => String(route.params.slug ?? ''))
+const { data: project } = useProject(slug)
+
+useProjectRealtime(() => project.value?.uuid)
+
+// Also the team channel and the reconnect resync: a user can sit on a project
+// page across a disconnect, and that is exactly when a resync matters.
+useWorkspaceRealtime()
 </script>
 
 <template>
@@ -22,6 +40,7 @@ const ui = useUiStore()
         :style="{ height: 'var(--pm-topbar-h)' }"
       >
         <ProjectTopbar />
+        <ConnectionIndicator class="ml-auto shrink-0" />
       </header>
 
       <main class="flex-1 px-6 py-6">

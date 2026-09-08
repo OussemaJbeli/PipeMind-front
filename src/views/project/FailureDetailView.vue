@@ -91,7 +91,7 @@ function confirmResolve(payload: { resolution_type: ResolutionType, resolution_n
 
           <aside class="space-y-5">
             <SimilarFailuresPanel :items="failure.similar_failures" :slug="slug" />
-            <RecommendationsPanel :items="failure.recommendations" />
+            <RecommendationsPanel :items="failure.recommendations" :slug="slug" />
             <FailureMetaPanel :failure="failure" />
           </aside>
         </div>

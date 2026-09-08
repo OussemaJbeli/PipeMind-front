@@ -22,6 +22,7 @@ describe('project sidebar destinations', () => {
     'project.analytics',
     'project.analyses',
     'project.history',
+    'project.remediation',
     'project.knowledge',
     'project.integration',
     'project.settings',
@@ -43,7 +44,7 @@ describe('project sidebar destinations', () => {
   })
 
   it('passes the slug through as a prop so views can fetch', () => {
-    for (const name of ['project.knowledge', 'project.integration', 'project.settings']) {
+    for (const name of ['project.remediation', 'project.knowledge', 'project.integration', 'project.settings']) {
       const record = router.resolve({ name, params: { slug: 'demo' } }).matched.at(-1)
 
       // Without props:true the view receives slug === undefined and every
